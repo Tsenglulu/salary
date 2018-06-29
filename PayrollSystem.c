@@ -37,9 +37,32 @@ typedef struct ZGGZ
 
 int count=0;	/*员工数 全局变量*/
 
+int menu()
+{
+   int option=0;
+    char i=0;
+	printf("\n\n\t请选择<1 - 7>:\n");
+    printf("\t================================================================\n");
+    printf("\t|         1. 查询职工工资数据函数                              |\n");
+    printf("\t|         2. 修改职工工资数据函数                              |\n");
+    printf("\t|         3. 添加职工工资数据函数                              |\n");
+    printf("\t|         4. 删除职工工资数据函数                              |\n");
+    printf("\t|         5. 保存职工工资数据函数                              |\n");
+    printf("\t|         6. 浏览职工工资数据函数                              |\n");
+	printf("\t|         7. Exit the program                                  |\n");
+    printf("\t================================================================\n");
+	printf("\n\t你的选择是：");
+    scanf("%c",&i);
+    option=(int)(i-'0');
+    while(option<1||option>7){
+        printf("Input Error!Please retype:");
+        scanf("%d",&option);
+    }
+    return option;
+}
 
 
-void add_money(zggz S[])		/*计算应发工资*/       
+void add_money(zggz S[])			/*计算应发工资*/       
 {
 	int i;
 	for(i=0;i<count;i++)
@@ -47,7 +70,7 @@ void add_money(zggz S[])		/*计算应发工资*/
 }
 
 
-void grsds(zggz S[])			/*计算个人所得税*/       
+void grsds(zggz S[])				/*计算个人所得税*/       
 {
 	int i;
 	for(i=0;i<count;i++)
@@ -82,14 +105,15 @@ void grsds(zggz S[])			/*计算个人所得税*/
 }
 
 
-void add_wages(zggz S[])		/*计算实发工资*/	       
+void add_wages(zggz S[])			/*计算实发工资*/	       
 {
 	int i;
 	for(i=0;i<count;i++)
 		S[i].payroll=S[i].gross_pay-S[i].Personal_income_tax;
 }
 
-int read(zggz t[])				/*读取职工工资数据函数*/
+
+int read(zggz t[])					/*读取职工工资数据函数*/
 {
 	zggz T;
 	FILE *fp;/*定义文件指针*/
@@ -117,134 +141,18 @@ int read(zggz t[])				/*读取职工工资数据函数*/
 		count++;       
 	}
 		
-	printf("\t\t\t有%d个员工信息被读入\n",count);
+	printf("\n\n");
 	fclose(fp);
 	return count;		
 }
 
 
-int write(zggz t[])				/*保存职工工资数据函数*/
-{
-	int i;
-	if(count>0) 
-	{
-		FILE* fp1=fopen("gz.dat","w");
-		if (fp1==NULL)
-		{   /*若打开文件失败则退出*/
-
-            puts("不能打开文件！");
-            return 0;
-		}
-
-		for(i=0;i<count;i++)
-		{
-			printf("\n");
-		    fprintf(fp1, "%s\n", t[i].wo_name);
-	        fprintf(fp1, "%s\n", t[i].id);              
-	       	fprintf(fp1, "%lf\n", t[i].position_value);              
-			fprintf(fp1, "%lf\n", t[i].Pay_salary);              
-			fprintf(fp1, "%lf\n", t[i].duty_allowance);              
-			fprintf(fp1, "%lf\n", t[i].merit_pay);    
-			fprintf(fp1, "%lf\n", t[i].gross_pay); 
-			fprintf(fp1, "%lf\n", t[i].Personal_income_tax);
-			fprintf(fp1, "%lf\n", t[i].payroll);
-		}
-		printf("\t\t保存完毕\n");
-		fclose(fp1);
-	}else
-	{
-		 printf("人数为空");
-	}
-
-    return 0;
-}
-
-
-int find(zggz t[])				/*查询职工工资数据函数*/
-{
-	char gonghao[10];
-	int flag=0; /*标记员工有没有存在*/
-	int j=0;	/*记录员工存在的位置*/
-	int i=0;	/*记录员工存在的位置*/
-	printf("\n\n\t\t请输入要查询的工号:");
-	scanf("%s",gonghao);
-	for(i=0;i<count;i++)
-	{
-		if (strcmp(t[i].id,gonghao)==0)
-		{
-			flag = 1;
-			break;
-		}
-	}
-	
-	/*如果存在该员工，那么输出该员工的信息*/
- 
-	if (flag)
-	{    
-		
-		printf("\n");              
-		printf("\t\t姓名:%s\n", t[i].wo_name);
-		printf("\t\t工号:%s\n", t[i].id);              
-		printf("\t\t岗位工资:%lf\n", t[i].position_value);              
-		printf("\t\t薪级工资:%lf\n", t[i].Pay_salary);              
-		printf("\t\t职务津贴:%lf\n", t[i].duty_allowance);              
-		printf("\t\t绩效工资:%lf\n", t[i].merit_pay);    
-		printf("\t\t应发工资:%lf\n", t[i].gross_pay); 
-		printf("\t\t个人所得税:%lf\n", t[i].Personal_income_tax);
-		printf("\t\t实发工资:%lf\n", t[i].payroll);  
-		printf("\n\t\t查询完毕\n");
-
-	 } 
-	 else
-	 { 
-		 printf("没有找到该编号的员工！\n"); 
-	 }
-     
-	 printf("\n");
-	 system("pause");
-     return 0;
-}
-
-
-int list(zggz t[])				/*浏览职工工资数据函数*/
-{
-
-	int i;
-	int asd=count;
-	if(asd=!0)
-	{
-			
-		for(i=0;i<count;i++)
-		{
-			
-			 
-			printf("\t\t姓名:%s\n", t[i].wo_name);
-			printf("\t\t工号:%s\n", t[i].id);              
-			printf("\t\t岗位工资:%lf\n", t[i].position_value);              
-			printf("\t\t薪级工资:%lf\n", t[i].Pay_salary);              
-			printf("\t\t职务津贴:%lf\n", t[i].duty_allowance);              
-			printf("\t\t绩效工资:%lf\n", t[i].merit_pay);    
-			printf("\t\t应发工资:%lf\n", t[i].gross_pay); 
-			printf("\t\t个人所得税:%lf\n", t[i].Personal_income_tax);
-			printf("\t\t实发工资:%lf\n", t[i].payroll);  
-			printf("\n");
-
-		}
-	}
-	else
-	{ 
-		printf("没有员工！\n");  
-	}
-	return 0;
-}
-
-
-int modify(zggz t[])			/*修改职工工资数据函数*/
+int modify(zggz t[])				/*修改职工工资数据函数*/
 {
 	char gonghao[10];
 	int flag=0; /*标记员工有没有存在*/
 	int i=0;	/*记录员工存在的位置*/
-	printf("\n\n\t\t请输入要修改的工号");
+	printf("\n\n\t请输入要修改的工号:");
 	scanf("%s",gonghao);
 	for(i=0;i<count;i++)
 	{
@@ -257,52 +165,111 @@ int modify(zggz t[])			/*修改职工工资数据函数*/
 
 	if (flag)
 	{              
-			printf("\n\t\t您要修改的内容如下：\n");           
-			printf("\t\t姓名:%s\n", t[i].wo_name);
-			printf("\t\t工号:%s\n", t[i].id);              
-			printf("\t\t岗位工资:%lf\n", t[i].position_value);              
-			printf("\t\t薪级工资:%lf\n", t[i].Pay_salary);              
-			printf("\t\t职务津贴:%lf\n", t[i].duty_allowance);              
-			printf("\t\t绩效工资:%lf\n", t[i].merit_pay);    
-			printf("\t\t应发工资:%lf\n", t[i].gross_pay); 
-			printf("\t\t个人所得税:%lf\n", t[i].Personal_income_tax);
-			printf("\t\t实发工资:%lf\n", t[i].payroll);
+			printf("\n\t您要修改的内容如下：\n");           
+			printf("\t姓名:%s\n", t[i].wo_name);
+			printf("\t工号:%s\n", t[i].id);              
+			printf("\t岗位工资:%lf\n", t[i].position_value);              
+			printf("\t薪级工资:%lf\n", t[i].Pay_salary);              
+			printf("\t职务津贴:%lf\n", t[i].duty_allowance);              
+			printf("\t绩效工资:%lf\n", t[i].merit_pay);    
+			printf("\t应发工资:%lf\n", t[i].gross_pay); 
+			printf("\t个人所得税:%lf\n", t[i].Personal_income_tax);
+			printf("\t实发工资:%lf\n", t[i].payroll);
 			printf("\n");
    
-				printf("\n\t\t请输入修改后的position_value：");
+			printf("\n\t请输入修改后的position_value：");
 				scanf("%lf",&t[i].position_value);
-				 
-				printf("\n\t\t请输入修改后的Pay_salary：");
-			 	scanf("%lf",&t[i].Pay_salary);
-
-				printf("\n\t\t请输入修改后的duty_allowance：");
-			 	scanf("%lf",&t[i].duty_allowance);
-
-
-				printf("\n\t\t请输入修改后的merit_pay：");
-			 	scanf("%lf",&t[i].merit_pay);
+			printf("\n\t请输入修改后的Pay_salary：");
+				scanf("%lf",&t[i].Pay_salary);
+			printf("\n\t请输入修改后的duty_allowance：");
+				scanf("%lf",&t[i].duty_allowance);
+			printf("\n\t请输入修改后的merit_pay：");
+				scanf("%lf",&t[i].merit_pay);
 				
-					add_money(t);
-					grsds(t);
-					add_wages(t);
-					printf("\n\n\t\t修改完毕记得点击5保存一下！\n");
+			add_money(t);
+			grsds(t);
+			add_wages(t);
+			printf("\n\t修改完毕！修改后结果如下：\n\n");
+
+			printf("\t姓名:%s\n", t[i].wo_name);
+			printf("\t工号:%s\n", t[i].id);              
+			printf("\t岗位工资:%lf\n", t[i].position_value);              
+			printf("\t薪级工资:%lf\n", t[i].Pay_salary);              
+			printf("\t职务津贴:%lf\n", t[i].duty_allowance);              
+			printf("\t绩效工资:%lf\n", t[i].merit_pay);    
+			printf("\t应发工资:%lf\n", t[i].gross_pay); 
+			printf("\t个人所得税:%lf\n", t[i].Personal_income_tax);
+			printf("\t实发工资:%lf\n", t[i].payroll);
+
+			write(t);
 
 	} 
 	else
 	{ 
-		printf("没有找到该编号的员工！\n"); 
+		printf("\n\t没有找到该编号的员工！\n"); 
 	}
 	return 0;
 }
 
-int del(zggz t[])				/*删除职工工资数据函数*/
+
+int add(zggz t[])				/*增添职工工资数据函数*/
+{
+	int flag;
+	int j;
+	if (count>55)
+	{
+		printf("\t员工信息已满！\n");
+        return 0;
+	} 
+	else
+	{
+        printf("\n");
+		printf("\n\t请按序输入添加的工号:");
+
+		do{
+			flag=0;
+			scanf("%s", t[count].id);
+			for(j=0;j<count;j++)
+				if(strcmp(t[count].id,t[j].id)==0)
+				{
+					printf("\n\t工号已经存在，请重新输入:");
+					flag=1;
+					break;
+				}
+			
+		}while(flag==1);
+			  		 
+        printf("\n\t请输入要添加的员工的姓名：");
+			scanf("%s",t[count].wo_name);
+		printf("\n\t请输入要添加的员工的position_value：");
+			scanf("%lf",&t[count].position_value);
+			
+		printf("\n\t请输入要添加的员工的Pay_salary：");
+			scanf("%lf",&t[count].Pay_salary);
+		printf("\n\t请输入要添加的员工的duty_allowance：");
+			scanf("%lf",&t[count].duty_allowance);
+		printf("\n\t请输入要添加的员工的merit_pay：");
+			scanf("%lf",&t[count].merit_pay);
+		
+		count++;//count后加1
+		add_money(t);
+		grsds(t);
+		add_wages(t);
+		write(t);
+		printf("\n\t员工信息已经添加\n\n");
+
+    }
+	return 0;
+}
+
+int del(zggz t[])					/*删除职工工资数据函数*/
 {
 	char gonghao[10];/*存储需要删除的员工编号*/
 	int flag=0;		 /*标记有没有该员工*/
 	int sum_count=0; /*用来记录删除了几个员工信息*/
 	int i=0;
 	int j=0;
-	printf("\n\t\t请输入要删除员工的编号：");
+	printf("\n\t请输入要删除员工的编号：");
 	scanf("%s",gonghao);
 
 	for(i=0;i<=count;i++)
@@ -321,7 +288,7 @@ int del(zggz t[])				/*删除职工工资数据函数*/
 			t[j]=t[j+1];
 		}
 				
-			printf("\n\t\t该员工信息已经删除\n");
+			printf("\n\t该员工已被删除成功！\n");
 			sum_count++;/*删除了一个员工就+1*/
 	}
 
@@ -329,67 +296,189 @@ int del(zggz t[])				/*删除职工工资数据函数*/
 
 	if(flag==0)
 	{
-		printf("\n\t\t该员工信息已经删除\n");
+		printf("\n\t\t该员工信息不存在！\n");
 	}
 	write(t);
 	return 0;
 }
 
-int add(zggz t[])
+int write(zggz t[])					/*保存职工工资数据函数*/
 {
-	if (count>50)
+	int i;
+	if(count>0) 
 	{
-		printf("员工信息已满！\n");
-        return 0;
-	} 
-	else
+		FILE* fp1=fopen("gz.dat","w");
+		if (fp1==NULL)
+		{   /*若打开文件失败则退出*/
+
+            puts("不能打开文件！");
+            return 0;
+		}
+
+		for(i=0;i<count;i++)
+		{
+		    fprintf(fp1, "%s ", t[i].wo_name);
+	        fprintf(fp1, "%s ", t[i].id);              
+	       	fprintf(fp1, "%lf ", t[i].position_value);              
+			fprintf(fp1, "%lf ", t[i].Pay_salary);              
+			fprintf(fp1, "%lf ", t[i].duty_allowance);              
+			fprintf(fp1, "%lf ", t[i].merit_pay);    
+			fprintf(fp1, "%lf ", t[i].gross_pay); 
+			fprintf(fp1, "%lf ", t[i].Personal_income_tax);
+			fprintf(fp1, "%lf \n", t[i].payroll);
+		}
+		printf("\n\t保存完毕\n");
+		fclose(fp1);
+	}else
 	{
-        printf("\n");
+		 printf("\t\n人数为空\n");
+	}
 
-		printf("\n\t\t请按序输入添加的编号。（提示最后一个编号为：%s\n", t[count-1].id);
-		scanf("%s", t[count].id);
-			  		 
-        printf("\n\t\t请输入要添加的员工的姓名：");
-		scanf("%s",t[count].wo_name);
-
-		printf("\n\t\t请输入要添加的员工的position_value：");
-		scanf("%lf",&t[count].position_value);
-
-		printf("\n\t\t请输入要添加的员工的Pay_salary：");
-		scanf("%lf",&t[count].Pay_salary);
-		
-		printf("\n\t\t请输入要添加的员工的duty_allowance：");
-		scanf("%lf", &t[count].duty_allowance);
-		
-		printf("\n\t\t请输入要添加的员工的merit_pay：");
-		scanf("%lf", &t[count].merit_pay);
-	
-		count++;//count后加1
-
-			add_money(t);
-			grsds(t);
-			add_wages(t);
-			write(t);
-
-				printf("\n\t\t员工信息已经添加，记得点击“5”保存一下\n\n");
-
-    }
-	return 0;
+    return 0;
 }
 
 
+int find(zggz t[])					/*查询职工工资数据函数*/
+{
+	char gonghao[10];
+	int flag=0; /*标记员工有没有存在*/
+	int i=0;	/*记录员工存在的位置*/
+	printf("\n\n\t请输入要查询的工号:");
+	scanf("%s",gonghao);
+	for(i=0;i<count;i++)
+	{
+		if (strcmp(t[i].id,gonghao)==0)
+		{
+			flag = 1;
+			break;
+		}
+	}
+	
+	/*如果存在该员工，那么输出该员工的信息*/
+ 
+	if (flag)
+	{    
+		
+		printf("\n");              
+		printf("\t姓名:%s\n", t[i].wo_name);
+		printf("\t工号:%s\n", t[i].id);              
+		printf("\t岗位工资:%lf\n", t[i].position_value);              
+		printf("\t薪级工资:%lf\n", t[i].Pay_salary);              
+		printf("\t职务津贴:%lf\n", t[i].duty_allowance);              
+		printf("\t绩效工资:%lf\n", t[i].merit_pay);    
+		printf("\t应发工资:%lf\n", t[i].gross_pay); 
+		printf("\t个人所得税:%lf\n", t[i].Personal_income_tax);
+		printf("\t实发工资:%lf\n", t[i].payroll);  
+		printf("\n\t查询完毕!\n");
+
+	 } 
+	 else
+	 { 
+		 printf("\n\t没有找到该编号的员工！\n"); 
+	 }
+     
+	 printf("\n");
+	 system("pause");
+     return 0;
+}
 
 
+int list(zggz t[])					/*浏览职工工资数据函数*/
+{
+
+	int i;
+	int n;
+	int flag;
+	int j;
+	int m=1;
+	int asd=count;
+	printf("\n");
+	printf("\t====================================\n");
+    printf("\t|         1. 分批浏览              |\n");
+    printf("\t|         2. 全部浏览              |\n");
+	printf("\t|         3. Exit the program      |\n");
+    printf("\t====================================\n");
+	scanf("\t%d",&n);
+	do
+	{
+		flag=0;
+		if(n!=1&&n!=2&&n!=3)
+		{
+			flag=1;
+			printf("\t您输入的选择不存在，请重新输入：");
+			scanf("\t%d",&n);
+		}
+	}while(flag);
+
+	if(asd=!0)
+	{
+		if(n==1)
+		{
+			printf("\t请输入每次浏览的数量(建议小于10)：");
+			scanf("\t%d",&j);
+			i=0;
+			while(i<count&&m==1)
+			{
+				printf("\t姓名:%s\n", t[i].wo_name);
+				printf("\t工号:%s\n", t[i].id);              
+				printf("\t岗位工资:%lf\n", t[i].position_value);              
+				printf("\t薪级工资:%lf\n", t[i].Pay_salary);              
+				printf("\t职务津贴:%lf\n", t[i].duty_allowance);              
+				printf("\t绩效工资:%lf\n", t[i].merit_pay);    
+				printf("\t应发工资:%lf\n", t[i].gross_pay); 
+				printf("\t个人所得税:%lf\n", t[i].Personal_income_tax);
+				printf("\t实发工资:%lf\n", t[i].payroll);  
+				printf("\n");
+				i++;
+				if(i%j==0)
+				{
+					printf("\t继续浏览吗？(0否/1是)");
+					scanf("\t%d",&m);
+				}
+			}
+			printf("\n");
+			printf("\t工资数据已经浏览完毕！");
+			printf("\n");
+		}
+		if(n==2)
+		{
+			
+			for(i=0;i<count;i++)
+			{
+				printf("\t姓名:%s\n", t[i].wo_name);
+				printf("\t工号:%s\n", t[i].id);              
+				printf("\t岗位工资:%lf\n", t[i].position_value);              
+				printf("\t薪级工资:%lf\n", t[i].Pay_salary);              
+				printf("\t职务津贴:%lf\n", t[i].duty_allowance);              
+				printf("\t绩效工资:%lf\n", t[i].merit_pay);    
+				printf("\t应发工资:%lf\n", t[i].gross_pay); 
+				printf("\t个人所得税:%lf\n", t[i].Personal_income_tax);
+				printf("\t实发工资:%lf\n", t[i].payroll);  
+				printf("\t工资数据已经浏览完毕！");
+				printf("\n");
+			}
+		}
+		if(n==3)
+		{
+			return 0;
+		}
+	}
+	else
+	{ 
+		printf("\t\t没有员工！\n");  
+	}
+	return 0;
+}
 
 
 int main()
 {
 	zggz z[50];
-	int menu();
 	read(z);
 	add_money(z);	//核算工资
 	grsds(z);		//核算工资
 	add_wages(z);	//核算工资
+	printf("\t###  欢迎使用广西民族大学软件与信息安全学院职工工资管理系统  ###\n");
 
     do{ 
         switch(menu()){
@@ -419,26 +508,4 @@ int main()
     return 0;
 }
 
-int menu()
-{
-   int option=0;
-    char i=0;
-    printf("\t\t*************Main Menu*************\n");
-    printf("\t\t     1. 查询职工工资数据函数\n");
-    printf("\t\t     2. 修改职工工资数据函数\n");
-    printf("\t\t     3. 添加职工工资数据函数\n");
-    printf("\t\t     4. 删除职工工资数据函数\n");
-    printf("\t\t     5. 保存职工工资数据函数\n");
-    printf("\t\t     6. 浏览职工工资数据函数\n");
-	printf("\t\t     7. Exit the program\n");
-    printf("\t\t***********************************\n");
-	printf("\t\t\t请您选择(1-7):");
-    scanf("%c",&i);
-    option=(int)(i-'0');
-    while(option<1||option>7){
-        printf("Input Error!\n\t\tPlease retype:");
-        scanf("%d",&option);
-    }
-    return option;
-}
 
