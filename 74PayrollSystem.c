@@ -1,8 +1,8 @@
 /***********************************************************
 
   Copyright (C), 2017-2018
-  FileName:PayrollSystem.c
-  Author:郑路璐		Date:2018/6/26
+  FileName:74PayrollSystem.c
+  Author:郑路璐		Date:2018/7/4
   Function List: 
 	add_money() 计算应发工资
 	grsds()		计算个人所得税 
